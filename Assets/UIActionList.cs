@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIActionList : MonoBehaviour {
 
@@ -14,8 +15,14 @@ public class UIActionList : MonoBehaviour {
         uiPrefab.gameObject.SetActive(false);
         UpdateActions();
 	}
-	
-	void UpdateActions()
+
+    public void SetActions(Player p)
+    {
+        actions = p.actions;
+        UpdateActions();
+    }
+
+    void UpdateActions()
     {
         // go through the list and remove any actions no longer in our data
         List<Action> deathRow = new List<Action>();
@@ -23,12 +30,15 @@ public class UIActionList : MonoBehaviour {
         {
             if (actions.Contains(pair.Key) == false)
             {
-                Destroy(pair.Value.gameObject);
+                deathRow.Add(pair.Key);
             }
         }
         // remove them from the list
         foreach (Action a in deathRow)
+        {
+            Destroy(uiActions[a].gameObject);
             uiActions.Remove(a);
+        }
 
 
         // go through our actions and create instances from the prefab
@@ -42,5 +52,21 @@ public class UIActionList : MonoBehaviour {
                 uiActions[a].SetAction(a);
             }
         }
+
+        StartCoroutine(UpdateSize());
+    }
+
+    IEnumerator UpdateSize()
+    {
+        yield return new WaitForEndOfFrame();        
+        RectTransform rect = GetComponent<RectTransform>();
+        LayoutGroup layout = GetComponent<LayoutGroup>();
+        if (layout)
+        {
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, layout.preferredWidth);
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, layout.preferredHeight);
+        }
+
+        yield return null;
 	}
 }

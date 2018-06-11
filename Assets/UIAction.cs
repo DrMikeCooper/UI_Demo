@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIAction : MonoBehaviour {
+public class UIAction : MonoBehaviour, IToolTip {
 
     public Action action;
     public Image icon;
@@ -31,5 +32,10 @@ public class UIAction : MonoBehaviour {
             nameTag.text = action.name;
         if (descTag)
             descTag.text = action.desc;
+    }
+
+    string IToolTip.getToolTipMessage()
+    {
+        return "<b>"+action.name + "</b>\n"+action.desc;
     }
 }
