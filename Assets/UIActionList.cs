@@ -53,7 +53,7 @@ public class UIActionList : MonoBehaviour {
             }
         }
 
-        StartCoroutine(UpdateSize());
+        //StartCoroutine(UpdateSize());
     }
 
     IEnumerator UpdateSize()
